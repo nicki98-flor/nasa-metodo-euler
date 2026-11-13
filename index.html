@@ -1,0 +1,292 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NASA 1962 | Método de Euler</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header class="header">
+  <div class="header-content">
+    <span class="tag">MÉTODOS NUMÉRICOS · NASA 1962</span>
+    <h1>🚀 Misión Espacial</h1>
+    <h2>Simulador del Método de Euler</h2>
+    <p>
+      Simulación del ascenso de un cohete inspirada en
+      la misión Friendship 7 y el trabajo de Katherine Johnson.
+    </p>
+    <nav>
+      <a href="#simulador">Simulador</a>
+      <a href="#resultados">Resultados</a>
+      <a href="#graficas">Gráficas</a>
+      <a href="#conclusiones">Conclusiones</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+
+  <section class="card introduccion">
+    <span class="tag">EL DESAFÍO</span>
+    <h2>¿Podemos predecir el movimiento de un cohete?</h2>
+    <p>
+      En 1962, la NASA realizó una histórica misión orbital
+      con el astronauta John Glenn. Katherine Johnson
+      contribuyó a los cálculos de trayectoria.
+    </p>
+    <p>
+      Nuestro desafío consiste en utilizar el método de Euler
+      para aproximar la velocidad y la altura de un cohete
+      durante sus primeros segundos de ascenso.
+    </p>
+    <p class="nota">
+      Esta es una simulación educativa simplificada.
+      No reproduce los cálculos originales de la NASA.
+    </p>
+  </section>
+
+  <section class="card">
+    <span class="tag">MODELO MATEMÁTICO</span>
+    <h2>Ecuaciones diferenciales</h2>
+
+    <div class="ecuaciones">
+      <div class="ecuacion">
+        <h3>Velocidad</h3>
+        <p>dv/dt = A − k · v</p>
+      </div>
+      <div class="ecuacion">
+        <h3>Altura</h3>
+        <p>dy/dt = v</p>
+      </div>
+    </div>
+
+    <h3>Fórmulas del método de Euler</h3>
+
+    <div class="ecuaciones">
+      <div class="ecuacion">
+        <p>vₙ₊₁ = vₙ + h(A − kvₙ)</p>
+      </div>
+      <div class="ecuacion">
+        <p>yₙ₊₁ = yₙ + hvₙ</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="simulador" class="card">
+    <span class="tag">CONFIGURACIÓN</span>
+    <h2>Panel de control de la misión</h2>
+    <p>Ingresa los valores para ejecutar la simulación.</p>
+
+    <form id="formulario">
+      <div class="form-grid">
+
+        <div class="campo">
+          <label for="A">Aceleración neta inicial A (m/s²)</label>
+          <input type="number" id="A" value="20"
+                 step="any" required>
+        </div>
+
+        <div class="campo">
+          <label for="k">Coeficiente de resistencia k (s⁻¹)</label>
+          <input type="number" id="k" value="0.1"
+                 min="0" step="any" required>
+        </div>
+
+        <div class="campo">
+          <label for="v0">Velocidad inicial (m/s)</label>
+          <input type="number" id="v0" value="0"
+                 step="any" required>
+        </div>
+
+        <div class="campo">
+          <label for="y0">Altura inicial (m)</label>
+          <input type="number" id="y0" value="0"
+                 step="any" required>
+        </div>
+
+        <div class="campo">
+          <label for="T">Tiempo total (segundos)</label>
+          <input type="number" id="T" value="20"
+                 min="0.01" step="any" required>
+        </div>
+
+        <div class="campo">
+          <label for="h">Tamaño de paso h (segundos)</label>
+          <input type="number" id="h" value="1"
+                 min="0.001" step="any" required>
+        </div>
+
+      </div>
+
+      <div class="botones">
+        <button type="submit" class="btn principal">
+          🚀 Calcular misión
+        </button>
+
+        <button type="button" id="reiniciar" class="btn secundario">
+          Restablecer valores
+        </button>
+      </div>
+
+      <p id="mensaje" class="mensaje" role="alert"></p>
+    </form>
+  </section>
+
+  <section id="resultados" class="card">
+    <span class="tag">RESULTADOS</span>
+    <h2>Resultados del lanzamiento</h2>
+
+    <div class="resultados-grid">
+      <div class="resultado">
+        <span>Velocidad con Euler</span>
+        <strong id="velEuler">—</strong>
+        <small>m/s</small>
+      </div>
+
+      <div class="resultado">
+        <span>Altura con Euler</span>
+        <strong id="altEuler">—</strong>
+        <small>metros</small>
+      </div>
+
+      <div class="resultado">
+        <span>Velocidad exacta</span>
+        <strong id="velExacta">—</strong>
+        <small>m/s</small>
+      </div>
+
+      <div class="resultado">
+        <span>Altura exacta</span>
+        <strong id="altExacta">—</strong>
+        <small>metros</small>
+      </div>
+
+      <div class="resultado">
+        <span>Error de velocidad</span>
+        <strong id="errorVel">—</strong>
+        <small>%</small>
+      </div>
+
+      <div class="resultado">
+        <span>Error de altura</span>
+        <strong id="errorAlt">—</strong>
+        <small>%</small>
+      </div>
+    </div>
+  </section>
+
+  <section class="card">
+    <span class="tag">PROCEDIMIENTO</span>
+    <h2>Iteraciones del método de Euler</h2>
+
+    <p>
+      Selecciona una fila para observar las operaciones
+      matemáticas correspondientes a esa iteración.
+    </p>
+
+    <div class="tabla-contenedor">
+      <table id="tablaEuler">
+        <thead>
+          <tr>
+            <th>n</th>
+            <th>Tiempo (s)</th>
+            <th>Aceleración (m/s²)</th>
+            <th>Velocidad (m/s)</th>
+            <th>Altura (m)</th>
+            <th>Error v (%)</th>
+            <th>Error y (%)</th>
+          </tr>
+        </thead>
+        <tbody id="cuerpoTabla"></tbody>
+      </table>
+    </div>
+
+    <div id="procedimiento" class="procedimiento">
+      Selecciona una iteración para ver sus operaciones.
+    </div>
+
+    <button id="exportar" class="btn secundario" type="button">
+      📥 Exportar resultados a CSV
+    </button>
+  </section>
+
+  <section id="graficas" class="card">
+    <span class="tag">VISUALIZACIÓN</span>
+    <h2>Gráficas de la misión</h2>
+
+    <div class="graficas-grid">
+      <div class="grafica-card">
+        <h3>Velocidad vs. tiempo</h3>
+        <canvas id="graficaVelocidad"></canvas>
+      </div>
+
+      <div class="grafica-card">
+        <h3>Altura vs. tiempo</h3>
+        <canvas id="graficaAltura"></canvas>
+      </div>
+
+      <div class="grafica-card">
+        <h3>Error absoluto de velocidad</h3>
+        <canvas id="graficaErrorVel"></canvas>
+      </div>
+
+      <div class="grafica-card">
+        <h3>Error absoluto de altura</h3>
+        <canvas id="graficaErrorAlt"></canvas>
+      </div>
+    </div>
+
+    <p class="nota">
+      Las curvas continuas representan la solución exacta.
+      Las curvas de color lila muestran la aproximación de Euler.
+    </p>
+  </section>
+
+  <section class="card">
+    <span class="tag">VALIDACIÓN</span>
+    <h2>Comparación de tamaños de paso</h2>
+
+    <p>
+      Comparamos h, h/2 y h/4 para analizar
+      la precisión del método.
+    </p>
+
+    <div class="tabla-contenedor">
+      <table>
+        <thead>
+          <tr>
+            <th>Paso</th>
+            <th>Iteraciones</th>
+            <th>Velocidad (m/s)</th>
+            <th>Altura (m)</th>
+            <th>Error v (%)</th>
+            <th>Error y (%)</th>
+          </tr>
+        </thead>
+        <tbody id="tablaComparacion"></tbody>
+      </table>
+    </div>
+  </section>
+
+  <section id="conclusiones" class="card">
+    <span class="tag">ANÁLISIS FINAL</span>
+    <h2>Respuestas a las preguntas del desafío</h2>
+    <div id="respuestas"></div>
+
+    <h2>Conclusiones automáticas</h2>
+    <div id="conclusionesTexto"></div>
+  </section>
+
+</main>
+
+<footer>
+  <p>🚀 NASA 1962 — Desafío de Métodos Numéricos</p>
+  <p>Simulación educativa mediante el método de Euler explícito</p>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
